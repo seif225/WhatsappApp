@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/set_profile_image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="55dp"
+        android:src="@drawable/profil"
+        app:civ_border_color="@color/colorPrimary"
+        app:civ_border_width="5dp"
+
+        />
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/username_tv"
+    android:layout_below="@+id/set_profile_image"
+    android:textSize="15sp"
+    android:text="username:"
+    android:textColor="@color/colorPrimary"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="15dp"
+    />
+    <EditText
+        android:id="@+id/set_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/username_tv"
+
+        android:hint="Username"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:padding="5dp"
+        android:textSize="20sp"
+        android:inputType="textImeMultiLine"
+         android:background="@android:color/transparent"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/status_tv"
+        android:layout_below="@+id/set_user_name"
+        android:textSize="15sp"
+        android:text="status:"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"
+
+        />
+    <EditText
+        android:id="@+id/set_user_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/status_tv"
+        android:hint="status"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:padding="5dp"
+        android:textSize="20sp"
+        android:inputType="textImeMultiLine"
+        android:background="@android:color/transparent"
+
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/set_user_status"
+        android:layout_margin="15dp"
+        android:padding="10dp"
+        android:background="@drawable/buttons"
+        android:text="save settings"
+        android:textColor="#fefefe"
+        android:layout_centerInParent="true"
+        android:id="@+id/save_settings_btn"
+        />
+
+</RelativeLayout>
