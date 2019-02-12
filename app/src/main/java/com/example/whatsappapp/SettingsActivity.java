@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -43,6 +45,8 @@ public class SettingsActivity extends AppCompatActivity {
     private DatabaseReference rootRef;
     private static final int GALLERY_PICK=1;
     private StorageReference userProfileImageRef;
+    private String link;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,14 +105,33 @@ public class SettingsActivity extends AppCompatActivity {
 
                 if (resultCode == RESULT_OK)
                 {
-                    Uri resultUri = result.getUri();
-                    StorageReference filePath= userProfileImageRef.child(currentUserID + ".jpg");
-                    filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    final Uri resultUri = result.getUri();
+                    final StorageReference filePath= userProfileImageRef.child(currentUserID + ".jpg");
+                    filePath.putFile(resultUri)
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                                link=uri.toString();
+                                            rootRef.child("users").child(currentUserID).child("image").setValue(link);
+
+                                        }
+                                    });
+                                }
+                            })
+
+                            .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
 
                             if (task.isSuccessful()){
                                 Toast.makeText(getApplicationContext(),"your picture has been updated successfully",Toast.LENGTH_LONG).show();
+
+
+
+
 
                             }
                                 else
@@ -119,7 +142,9 @@ public class SettingsActivity extends AppCompatActivity {
                                     }
 
                         }
-                    });
+
+                    })
+                    ;
 
 
 
@@ -140,8 +165,8 @@ public class SettingsActivity extends AppCompatActivity {
                     String retriveUserName=dataSnapshot.child("name").getValue().toString();
                     String retriveStatus=dataSnapshot.child("status").getValue().toString();
                     String retriveImage=dataSnapshot.child("image").getValue().toString();
-
-                    userName.setText(retriveUserName);
+               Picasso.with(getBaseContext()).load(retriveImage).into(profilePicture);
+               userName.setText(retriveUserName);
                      status.setText(retriveStatus);
 
 

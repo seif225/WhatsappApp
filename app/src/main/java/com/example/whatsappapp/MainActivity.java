@@ -143,9 +143,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         if(item.getItemId()== R.id.main_find_friends_option){
-
+                sendUserToFindFriendsActivity();
         }
             return true;
+    }
+
+    private void sendUserToFindFriendsActivity() {
+
+        startActivity(new Intent(MainActivity.this,FindFriends.class));
     }
 
     private void requestNewGroup() {
