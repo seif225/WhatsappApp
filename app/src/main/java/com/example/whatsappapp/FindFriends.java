@@ -62,7 +62,7 @@ public class FindFriends extends AppCompatActivity {
                 = new FirebaseRecyclerAdapter<Contacts, FindFriendsViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull FindFriendsViewHolder holder, final int position, @NonNull Contacts model) {
-
+                holder.parent.setVisibility(View.VISIBLE);
                 holder.userName.setText(model.getName());
                 holder.userStatus.setText(model.getStatus());
                 Picasso.with(getBaseContext()).load(model.getImage()).into(holder.profileImage);
@@ -96,6 +96,7 @@ public class FindFriends extends AppCompatActivity {
     public static class FindFriendsViewHolder extends RecyclerView.ViewHolder{
             TextView userName,userStatus;
             CircleImageView profileImage;
+            View parent;
 
 
         public FindFriendsViewHolder(@NonNull View itemView) {
@@ -103,6 +104,7 @@ public class FindFriends extends AppCompatActivity {
             userName=itemView.findViewById(R.id.user_name_tv);
             userStatus=itemView.findViewById(R.id.user_status);
             profileImage=itemView.findViewById(R.id.user_profile_picture_inFind);
+            parent = itemView;
 
 
         }

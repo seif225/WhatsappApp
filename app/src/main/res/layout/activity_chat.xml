@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChatActivity"
+    android:background="@drawable/wallpaper"
+    android:id="@+id/relativelol"
+    >
+
+    <include
+        layout="@layout/custom_layout_bar"
+        android:id="@+id/chat_toolbar_bar"
+        >
+
+    </include>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/chat_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/chat_toolbar_bar"
+        android:layout_above="@+id/media_bar"
+
+        android:layout_marginBottom="2dp"
+
+
+        >
+
+    </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/media_bar"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:layout_alignParentBottom="true"
+        >
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:hint="write your message here .."
+            android:id="@+id/chat_activity_et"
+            android:background="@drawable/send_e_t"
+            android:paddingBottom="12dp"
+            android:paddingTop="12dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="10dp"
+
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="6dp"
+            />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:id="@+id/chat_activity_send_button"
+            android:src="@drawable/ic_send_black_24dp"
+            android:background="@drawable/buttons"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

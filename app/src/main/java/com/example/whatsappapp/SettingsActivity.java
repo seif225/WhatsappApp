@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -46,6 +47,7 @@ public class SettingsActivity extends AppCompatActivity {
     private static final int GALLERY_PICK=1;
     private StorageReference userProfileImageRef;
     private String link;
+    private Toolbar settingsToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,11 +221,11 @@ public class SettingsActivity extends AppCompatActivity {
             status.requestFocus();
 
         } else {
-            HashMap<String, String> profile = new HashMap<>();
+            HashMap<String, Object> profile = new HashMap<>();
             profile.put("uid", currentUserID);
             profile.put("name", setUserName);
             profile.put("status", setStatus);
-            rootRef.child("users").child(currentUserID).setValue(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
+            rootRef.child("users").child(currentUserID).updateChildren(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
 
@@ -258,5 +260,12 @@ public class SettingsActivity extends AppCompatActivity {
         userName = findViewById(R.id.set_user_name);
         status = findViewById(R.id.set_user_status);
         profilePicture = findViewById(R.id.set_profile_image);
+        settingsToolbar = findViewById(R.id.settings_toolbar);
+        setSupportActionBar(settingsToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setTitle("Account Settings");
+
+
     }
 }

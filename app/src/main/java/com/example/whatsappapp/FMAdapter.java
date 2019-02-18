@@ -21,6 +21,9 @@ public class FMAdapter extends FragmentPagerAdapter {
 
             case 2: return  "contacts";
 
+            case 3: return  "requests";
+
+
             default: return null;
         }
 
@@ -40,6 +43,8 @@ public class FMAdapter extends FragmentPagerAdapter {
             case 2: ContactsFragment contactsFragment=new ContactsFragment();
                     return contactsFragment;
 
+            case 3: RequestFragment requestFragment= new RequestFragment();
+                    return requestFragment;
 
             default: return null;
         }
@@ -48,7 +53,7 @@ public class FMAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
 
