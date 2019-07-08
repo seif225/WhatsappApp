@@ -51,8 +51,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
             // Inflate the layout for this fragment
             privatechatsView= inflater.inflate(R.layout.fragment_chats, container, false);
             mAuth=FirebaseAuth.getInstance();
-            currentUserId=mAuth.getCurrentUser().getUid();
-            chatRef = FirebaseDatabase.getInstance().getReference().child("contacts").child(currentUserId);
+
             usersRef=FirebaseDatabase.getInstance().getReference().child("users");
             chatList = privatechatsView.findViewById(R.id.chat_fragment_recycler_view);
             chatList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -69,67 +68,72 @@ import de.hdodenhof.circleimageview.CircleImageView;
     public void onStart() {
         super.onStart();
 
-        FirebaseRecyclerOptions<Contacts> options = new FirebaseRecyclerOptions.Builder<Contacts>().setQuery(chatRef,Contacts.class).build();
-        FirebaseRecyclerAdapter<Contacts,chatsViewHolder> adapter=new FirebaseRecyclerAdapter<Contacts, chatsViewHolder>(options) {
-            @Override
-            protected void onBindViewHolder(@NonNull final chatsViewHolder holder, int position, @NonNull Contacts model) {
-                holder.parent.setVisibility(View.VISIBLE);
-                final String usersId = getRef(position).getKey();
-                usersRef.child(usersId).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                   if(dataSnapshot.exists()){
-                       if(dataSnapshot.hasChild("image")){
-                            retImage=dataSnapshot.child("image").getValue().toString();
-                           Picasso.with(getContext()).load(retImage).into(holder.profileImage);
+        if ( mAuth.getCurrentUser() != null) {
+            currentUserId = mAuth.getCurrentUser().getUid();
+            chatRef = FirebaseDatabase.getInstance().getReference().child("contacts").child(currentUserId);
 
 
+            FirebaseRecyclerOptions<Contacts> options = new FirebaseRecyclerOptions.Builder<Contacts>().setQuery(chatRef, Contacts.class).build();
+            FirebaseRecyclerAdapter<Contacts, chatsViewHolder> adapter = new FirebaseRecyclerAdapter<Contacts, chatsViewHolder>(options) {
+                @Override
+                protected void onBindViewHolder(@NonNull final chatsViewHolder holder, int position, @NonNull Contacts model) {
+                    holder.parent.setVisibility(View.VISIBLE);
+                    final String usersId = getRef(position).getKey();
+                    usersRef.child(usersId).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                       }
-
-
-                       final String retUserName = dataSnapshot.child("name").getValue().toString();
-                       final String retUserStatus = dataSnapshot.child("status").getValue().toString();
-                       holder.userName.setText(retUserName);
-                       holder.userStatus.setText("Last Seen: "+"\n" + "Data" + "time");
-                       holder.itemView.setOnClickListener(new View.OnClickListener() {
-                           @Override
-                           public void onClick(View v) {
-                               Intent chatIntent = new Intent(getContext() , ChatActivity.class);
-                               chatIntent.putExtra("visit_user_id",usersId);
-                               chatIntent.putExtra("visit_user_name",retUserName);
-                               chatIntent.putExtra("visit_user_image",retImage);
-
-                               startActivity(chatIntent);
+                            if (dataSnapshot.exists()) {
+                                if (dataSnapshot.hasChild("image")) {
+                                    retImage = dataSnapshot.child("image").getValue().toString();
+                                    Picasso.with(getContext()).load(retImage).into(holder.profileImage);
 
 
-                           }
-                       });
+                                }
 
-                   }
 
-                    }
+                                final String retUserName = dataSnapshot.child("name").getValue().toString();
+                                final String retUserStatus = dataSnapshot.child("status").getValue().toString();
+                                holder.userName.setText(retUserName);
+                                holder.userStatus.setText("Last Seen: " + "\n" + "Data" + "time");
+                                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent chatIntent = new Intent(getContext(), ChatActivity.class);
+                                        chatIntent.putExtra("visit_user_id", usersId);
+                                        chatIntent.putExtra("visit_user_name", retUserName);
+                                        chatIntent.putExtra("visit_user_image", retImage);
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        startActivity(chatIntent);
 
-                    }
-                });
-            }
 
-            @NonNull
-            @Override
-            public chatsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-               View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.users_display_layout,viewGroup,false);
-                return new chatsViewHolder(view);
+                                    }
+                                });
 
-            }
-        };
+                            }
 
-        chatList.setAdapter(adapter);
-        adapter.startListening();
+                        }
 
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+                @NonNull
+                @Override
+                public chatsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                    View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.users_display_layout, viewGroup, false);
+                    return new chatsViewHolder(view);
+
+                }
+            };
+
+            chatList.setAdapter(adapter);
+
+            adapter.startListening();
+        }
         }
         public static class chatsViewHolder extends RecyclerView.ViewHolder
 
